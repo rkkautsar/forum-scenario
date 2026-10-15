@@ -15,5 +15,13 @@ test("replies list includes only other members on the current member's threads",
     });
 
     const mayaReplies = await request("/api/notifications");
-    assert.ok(Array.isArray(mayaReplies.data));
+    assert.equal(mayaReplies.data[0].title, "My question");
+    assert.equal(
+      (
+        await request("/api/notifications", {
+          headers: { "x-demo-user": "sam" },
+        })
+      ).data.length,
+      0,
+    );
   }));
