@@ -1,30 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-
-type Comment = {
-  id: number;
-  authorId: string;
-  author: string;
-  body: string;
-  editedAt?: number;
-};
-type Post = {
-  id: number;
-  title: string;
-  body: string;
-  preview: string;
-  author: string;
-  comments: Comment[];
-};
-type Api = (path: string, options?: RequestInit) => Promise<any>;
-type FeatureContext = { api: Api; refresh: () => void; user: string; post?: Post; query?: string; setQuery?: (query: string) => void };
-type FeatureModule = {
-  Toolbar?: (props: FeatureContext) => React.ReactNode;
-  PostAction?: (props: FeatureContext) => React.ReactNode;
-  PostBody?: (props: FeatureContext) => React.ReactNode;
-  CommentAction?: (props: FeatureContext & { comment: Comment }) => React.ReactNode;
-  EmptyState?: (props: { query: string }) => React.ReactNode;
-  Pagination?: (props: { posts: Post[]; api: Api; query?: string; setQuery?: (query: string) => void }) => React.ReactNode;
-};
+import type { Api, FeatureModule, Post } from "./feature-types.ts";
 
 const modules = import.meta.glob<FeatureModule>("./features/*.tsx", { eager: true });
 
@@ -59,11 +34,21 @@ export function App() {
   }, [user]);
 
   useEffect(() => {
-    api("/api/users").then(setUsers).catch((error) => setStatus(error.message));
-    api("/api/features").then((items) => setFeatures(items.map((item: { id: string }) => item.id)));
+    let active = true;
+    api("/api/users")
+      .then((items) => { if (active) setUsers(items); })
+      .catch((error) => { if (active) setStatus(error.message); });
+    api("/api/features")
+      .then((items) => { if (active) setFeatures(items.map((item: { id: string }) => item.id)); })
+      .catch((error) => { if (active) setStatus(error.message); });
+    return () => { active = false; };
   }, [api]);
   useEffect(() => {
-    api("/api/posts?" + query).then(setPosts).catch((error) => setStatus(error.message));
+    let active = true;
+    api("/api/posts?" + query)
+      .then((items) => { if (active) setPosts(items); })
+      .catch((error) => { if (active) setStatus(error.message); });
+    return () => { active = false; };
   }, [api, revision, query]);
 
   const run = async (action: () => Promise<unknown>) => {

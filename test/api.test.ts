@@ -25,4 +25,5 @@ test("forum starts with real threads and persists comment writes", () =>
     const after = await request("/api/posts?limit=50");
 
     assert.equal(after.data[0].comments[0].body, "I can help with that.");
+    assert.equal((await request("/api/posts", { method: "POST" })).status, 400);
   }));

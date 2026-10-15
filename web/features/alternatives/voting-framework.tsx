@@ -1,4 +1,4 @@
-import type { FeatureContext } from "../feature-types.ts";
+import type { FeatureContext } from "../../feature-types.ts";
 
 export function PostAction({ api, refresh, post }: FeatureContext) {
   if (!post) return null;

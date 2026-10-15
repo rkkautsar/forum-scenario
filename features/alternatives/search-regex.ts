@@ -1,7 +1,7 @@
-import type { ForumFeature } from "../src/server.ts";
+import type { ForumFeature } from "../../src/server.ts";
 
 export const feature: ForumFeature = {
-  id: "search-regex",
+  id: "search",
   label: "Find old discussions",
   priority: 10,
   filterPosts(posts, request) {

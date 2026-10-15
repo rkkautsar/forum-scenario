@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { FeatureContext } from "../feature-types.ts";
+import type { FeatureContext } from "../../feature-types.ts";
 
 export function Toolbar({ query = "", setQuery }: FeatureContext) {
   const current = new URLSearchParams(query).get("q") ?? "";

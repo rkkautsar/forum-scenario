@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from "express";
 import { createServer } from "node:http";
 import { DatabaseSync } from "node:sqlite";
-import { mkdirSync, readFileSync, readdirSync } from "node:fs";
+import { mkdirSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { excerpt } from "./text.ts";
@@ -74,10 +74,8 @@ export async function createForum(
 
   const features: ForumFeature[] = [];
   const featureDirectory = join(root, "features");
-  const manifest = JSON.parse(readFileSync(join(featureDirectory, "manifest.json"), "utf8")) as string[];
-  for (const file of manifest) {
-    if (!/^[a-z-]+$/.test(file)) throw new Error("Invalid feature manifest entry");
-    const { feature } = await import(pathToFileURL(join(featureDirectory, file + ".ts")).href);
+  for (const file of readdirSync(featureDirectory).filter((name) => name.endsWith(".ts")).sort()) {
+    const { feature } = await import(pathToFileURL(join(featureDirectory, file)).href);
     features.push(feature as ForumFeature);
   }
   features.sort((left, right) => (left.priority ?? 0) - (right.priority ?? 0));
@@ -137,8 +135,9 @@ export async function createForum(
     response.json(results);
   });
   app.post("/api/posts", (request, response) => {
-    const title = String(request.body.title ?? "").trim();
-    const body = String(request.body.body ?? "").trim();
+    const input = request.body ?? {};
+    const title = String(input.title ?? "").trim();
+    const body = String(input.body ?? "").trim();
     if (!title || title.length > 160 || !body || body.length > 5000) {
       response.status(400).json({
         error: "Use a title up to 160 characters and a post up to 5000 characters.",
@@ -156,7 +155,7 @@ export async function createForum(
       response.status(404).json({ error: "Post not found" });
       return;
     }
-    const body = String(request.body.body ?? "").trim();
+    const body = String((request.body ?? {}).body ?? "").trim();
     if (!body || body.length > 2000) {
       response.status(400).json({ error: "Use a comment up to 2000 characters." });
       return;

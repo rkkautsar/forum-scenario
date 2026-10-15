@@ -1,5 +1,5 @@
 import express from "express";
-import type { ForumFeature } from "../src/server.ts";
+import type { ForumFeature } from "../../src/server.ts";
 
 type VoteStep = (postId: string, userId: string, database: any) => void;
 const pipeline: VoteStep[] = [
@@ -19,7 +19,7 @@ router.post("/posts/:postId/votes", (request, response) => {
 });
 
 export const feature: ForumFeature = {
-  id: "voting-framework",
+  id: "voting",
   label: "Vote on threads",
   router,
   setup(db) { db.exec("CREATE TABLE IF NOT EXISTS votes(postId INTEGER REFERENCES posts(id),userId TEXT REFERENCES users(id),PRIMARY KEY(postId,userId))"); },

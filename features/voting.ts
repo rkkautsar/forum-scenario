@@ -15,7 +15,7 @@ router.post("/posts/:postId/votes", (request, response) => {
 });
 
 export const feature: ForumFeature = {
-  id: "voting-simple",
+  id: "voting",
   label: "Vote on threads",
   router,
   setup(db) {

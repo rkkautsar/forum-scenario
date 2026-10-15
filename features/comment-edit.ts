@@ -13,7 +13,7 @@ router.patch("/comments/:commentId", (request, response) => {
     response.status(403).json({ error: "Only the author can edit this comment" });
     return;
   }
-  const body = String(request.body.body ?? "").trim();
+  const body = String((request.body ?? {}).body ?? "").trim();
   if (!body || body.length > 2000) {
     response.status(400).json({ error: "Use a comment up to 2000 characters" });
     return;
