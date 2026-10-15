@@ -21,7 +21,11 @@ test("saved lists are private to the selected member", () =>
 
     assert.equal((await request("/api/posts?saved=1")).data.length, 0);
     assert.equal(
-      (await request("/api/posts?saved=1", { headers: { "x-demo-user": "sam" } })).data[0].id,
+      (
+        await request("/api/posts?saved=1", {
+          headers: { "x-demo-user": "sam" },
+        })
+      ).data[0].id,
       1,
     );
   }));
