@@ -1,4 +1,4 @@
-import type { FeatureContext } from "../../feature-types.ts";
+import type { FeatureContext } from "../feature-types.ts";
 
 function format(text: string) {
   return text.split(/(\*\*[^*]+\*\*|\n)/g).map((part, index) => {
