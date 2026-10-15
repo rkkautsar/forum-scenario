@@ -1,61 +1,12 @@
 <!doctype html>
 <html lang="en">
-  <meta charset="utf-8" /><meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
-  /><title>Forum</title
-  ><link rel="stylesheet" href="/style.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forum · the community</title>
+  </head>
   <body>
-    <header>
-      <a href="/" class="brand">forum<span> / the community</span></a
-      ><label
-        >Browsing as
-        <select id="user" aria-label="Demo identity"></select
-      ></label>
-    </header>
-    <div class="layout">
-      <main>
-        <div class="intro">
-          <div>
-            <p class="eyebrow">A PLACE TO CATCH UP</p>
-            <h1>Good conversations<br />deserve a home.</h1>
-          </div>
-          <button id="compose">Start a thread</button>
-        </div>
-        <p id="status" role="status"></p>
-        <section id="tools"></section>
-        <form id="new-post" hidden>
-          <label>Title<input name="title" required maxlength="160" /></label
-          ><label
-            >What is on your mind?<textarea
-              name="body"
-              required
-              maxlength="5000"
-            ></textarea></label
-          ><button>Post thread</button>
-        </form>
-        <section id="feed" aria-label="Threads"></section>
-        <div id="pagination"></div>
-      </main>
-      <aside>
-        <p class="eyebrow">WELCOME IN</p>
-        <h2>Your corner<br />of the internet.</h2>
-        <p>
-          A few familiar faces, thoughtful questions, and room for a tangent.
-        </p>
-        <hr />
-        <h3>Keep it useful.</h3>
-        <p>
-          Be curious. Explain your thinking. Remember there is a person on the
-          other side.
-        </p>
-        <div class="note">
-          The community is growing. Follow the Game Master issue in GitHub to
-          help decide what ships next.
-        </div>
-        <p class="fine">Local training app · demo identities</p>
-      </aside>
-    </div>
-    <script type="module" src="/app.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/main.tsx"></script>
   </body>
 </html>

@@ -1,6 +1,7 @@
 schema: 1
 id: forum
-version: 0.1.1
+version: 0.2.0
+refPrefix: v0.2.0/
 title: Forum
 description:
   Take over a small community forum as its members outgrow the group chat.

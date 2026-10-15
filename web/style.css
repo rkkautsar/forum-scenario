@@ -224,6 +224,20 @@ textarea {
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
+#tools form {
+  display: flex;
+  gap: 8px;
+}
+#tools input {
+  min-width: 220px;
+}
+.notice-list {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #deded8;
+  border-radius: 6px;
+  background: white;
+}
 #pagination {
   display: flex;
   gap: 12px;
