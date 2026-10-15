@@ -6,7 +6,13 @@ export const feature: Feature = {
   filter(posts, { url }) {
     const offset = Number(url.searchParams.get("offset") ?? 0),
       limit = Number(url.searchParams.get("limit") ?? 2);
-    if (offset < 0 || limit < 1 || limit > 50)
+    if (
+      !Number.isInteger(offset) ||
+      !Number.isInteger(limit) ||
+      offset < 0 ||
+      limit < 1 ||
+      limit > 50
+    )
       throw Error("Invalid pagination");
     return posts.slice(offset, offset + limit);
   },
