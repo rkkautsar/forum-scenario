@@ -13,7 +13,7 @@ export const feature: Feature = {
       return true;
     }
     const input = await body();
-    if (input.authorId !== user) {
+    if (comment.authorId !== user) {
       send(403, { error: "Only the author can edit this comment" });
       return true;
     }
