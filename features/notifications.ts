@@ -6,9 +6,9 @@ export const feature: Feature = {
     if (method !== "GET" || path !== "/api/notifications") return false;
     const rows = db
       .prepare(
-        "SELECT comments.body,comments.postId,posts.title FROM comments JOIN posts ON posts.id=comments.postId ORDER BY comments.createdAt DESC LIMIT 20",
+        "SELECT comments.body,comments.postId,posts.title FROM comments JOIN posts ON posts.id=comments.postId WHERE posts.authorId=? AND comments.authorId<>? ORDER BY comments.createdAt DESC LIMIT 20",
       )
-      .all();
+      .all(user, user);
     send(200, rows);
     return true;
   },
