@@ -1,6 +1,6 @@
 # Forum
 
-A small Express and React forum used by the Maintainer Sim scenario.
+A small Express and React forum used by the PR Flood scenario.
 
 Requires Node.js 24 or newer.
 
