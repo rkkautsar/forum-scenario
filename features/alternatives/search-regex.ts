@@ -8,6 +8,8 @@ export const feature: ForumFeature = {
     const query = String(request.query.q ?? "").trim();
     if (!query) return posts;
     const expression = new RegExp(query, "i");
-    return posts.filter((post) => expression.test(post.title + " " + post.body));
+    return posts.filter((post) =>
+      expression.test(post.title + " " + post.body),
+    );
   },
 };

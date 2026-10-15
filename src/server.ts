@@ -31,7 +31,8 @@ export type ForumFeature = {
 export async function createForum(
   database = process.env.FORUM_DATABASE ?? join(root, "data/forum.sqlite"),
 ) {
-  if (database !== ":memory:") mkdirSync(dirname(database), { recursive: true });
+  if (database !== ":memory:")
+    mkdirSync(dirname(database), { recursive: true });
 
   const db = new DatabaseSync(database);
   db.exec(`PRAGMA foreign_keys=ON;
@@ -74,8 +75,12 @@ export async function createForum(
 
   const features: ForumFeature[] = [];
   const featureDirectory = join(root, "features");
-  for (const file of readdirSync(featureDirectory).filter((name) => name.endsWith(".ts")).sort()) {
-    const { feature } = await import(pathToFileURL(join(featureDirectory, file)).href);
+  for (const file of readdirSync(featureDirectory)
+    .filter((name) => name.endsWith(".ts"))
+    .sort()) {
+    const { feature } = await import(
+      pathToFileURL(join(featureDirectory, file)).href
+    );
     features.push(feature as ForumFeature);
   }
   features.sort((left, right) => (left.priority ?? 0) - (right.priority ?? 0));
@@ -125,10 +130,14 @@ export async function createForum(
             "SELECT comments.*,users.name AS author FROM comments JOIN users ON users.id=comments.authorId WHERE postId=? ORDER BY createdAt,id",
           )
           .all(post.id)
-          .map((comment: any) => ({ ...comment, summary: excerpt(comment.body, 80) })),
+          .map((comment: any) => ({
+            ...comment,
+            summary: excerpt(comment.body, 80),
+          })),
       };
       for (const feature of features) {
-        if (feature.decoratePost) result = feature.decoratePost(result, forumRequest);
+        if (feature.decoratePost)
+          result = feature.decoratePost(result, forumRequest);
       }
       return result;
     });
@@ -140,12 +149,15 @@ export async function createForum(
     const body = String(input.body ?? "").trim();
     if (!title || title.length > 160 || !body || body.length > 5000) {
       response.status(400).json({
-        error: "Use a title up to 160 characters and a post up to 5000 characters.",
+        error:
+          "Use a title up to 160 characters and a post up to 5000 characters.",
       });
       return;
     }
     const result = db
-      .prepare("INSERT INTO posts(authorId,title,body,createdAt) VALUES(?,?,?,?)")
+      .prepare(
+        "INSERT INTO posts(authorId,title,body,createdAt) VALUES(?,?,?,?)",
+      )
       .run(request.user, title, body, Date.now());
     response.status(201).json({ id: Number(result.lastInsertRowid) });
   });
@@ -157,18 +169,24 @@ export async function createForum(
     }
     const body = String((request.body ?? {}).body ?? "").trim();
     if (!body || body.length > 2000) {
-      response.status(400).json({ error: "Use a comment up to 2000 characters." });
+      response
+        .status(400)
+        .json({ error: "Use a comment up to 2000 characters." });
       return;
     }
     const result = db
-      .prepare("INSERT INTO comments(postId,authorId,body,createdAt) VALUES(?,?,?,?)")
+      .prepare(
+        "INSERT INTO comments(postId,authorId,body,createdAt) VALUES(?,?,?,?)",
+      )
       .run(postId, (request as ForumRequest).user, body, Date.now());
     response.status(201).json({ id: Number(result.lastInsertRowid) });
   });
 
-  app.use((error: Error, _request: Request, response: Response, _next: Function) => {
-    response.status(400).json({ error: error.message });
-  });
+  app.use(
+    (error: Error, _request: Request, response: Response, _next: Function) => {
+      response.status(400).json({ error: error.message });
+    },
+  );
   const server = createServer(app);
   server.on("close", () => db.close());
   return server;
