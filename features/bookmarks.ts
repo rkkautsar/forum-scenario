@@ -19,8 +19,8 @@ export const feature: Feature = {
     if (url.searchParams.get("saved") !== "1") return posts;
     const saved = new Set(
       db
-        .prepare("SELECT postId FROM bookmarks")
-        .all()
+        .prepare("SELECT postId FROM bookmarks WHERE userId=?")
+        .all(user)
         .map((r: any) => r.postId),
     );
     return posts.filter((post) => saved.has(post.id));
