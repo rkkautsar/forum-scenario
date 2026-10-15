@@ -1,0 +1,11 @@
+name: Scenario release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  release:
+    uses: rkkautsar/maintainer-sim/.github/workflows/scenario-release.yml@e2cfe86f7ab10dc727f71c6d80b14e599b39a849
+    with:
+      engine_ref: e2cfe86f7ab10dc727f71c6d80b14e599b39a849

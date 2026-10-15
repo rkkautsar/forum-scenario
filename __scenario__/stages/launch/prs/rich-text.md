@@ -7,13 +7,13 @@ assessment:
   initial:
     sound: false
     explanation:
-      The formatter writes untrusted post text to innerHTML after regex
-      replacements without escaping existing HTML. A stored post can inject elements/event
-      handlers and execute script when another member reads the feed.
+      The React formatter writes untrusted post text through dangerouslySetInnerHTML
+      after regex replacements without escaping existing HTML. A stored post can inject
+      elements and event handlers when another member reads the feed.
     concern:
-      The formatter writes untrusted post text to innerHTML after regex replacements
-      without escaping existing HTML. A stored post can inject elements/event handlers
-      and execute script when another member reads the feed.
+      The React formatter writes untrusted post text through dangerouslySetInnerHTML
+      after regex replacements without escaping existing HTML. A stored post can inject
+      elements and event handlers when another member reads the feed.
   rev-1:
     sound: true
     satisfiesIssue: false
@@ -21,8 +21,8 @@ assessment:
       The prepared revision resolves the specific concern while preserving
       the useful behavior.
     reply:
-      I removed innerHTML. Formatting now creates text nodes and strong/br elements
-      explicitly.
+      I removed dangerouslySetInnerHTML. Formatting now renders post text as React text
+      and creates only strong and br elements.
 ---
 
 A couple of people asked whether they can highlight a sentence. This supports double-asterisk bold and line breaks without bringing in a Markdown library. It runs in the browser and leaves the API unchanged. I tried plain paragraphs and bold text; the formatting is deliberately limited.
