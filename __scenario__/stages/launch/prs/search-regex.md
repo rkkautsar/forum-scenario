@@ -8,13 +8,13 @@ assessment:
     sound: false
     explanation:
       The implementation constructs RegExp directly from the user query.
-      Literal punctuation changes matching, an unmatched bracket throws, and complex
-      patterns can be expensive. The issue asks for ordinary literal text search.
+      Literal punctuation changes matching, an unmatched bracket returns an error, and
+      complex patterns can be expensive. The issue asks for ordinary literal text search.
     satisfiesIssue: false
     concern:
       The implementation constructs RegExp directly from the user query. Literal
-      punctuation changes matching, an unmatched bracket throws, and complex patterns
-      can be expensive. The issue asks for ordinary literal text search.
+      punctuation changes matching, an unmatched bracket returns an error, and complex
+      patterns can be expensive. The issue asks for ordinary literal text search.
   rev-1:
     sound: true
     satisfiesIssue: true
