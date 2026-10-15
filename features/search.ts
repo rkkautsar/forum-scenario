@@ -5,9 +5,12 @@ export const feature: ForumFeature = {
   label: "Find old discussions",
   priority: 10,
   filterPosts(posts, request) {
-    const query = String(request.query.q ?? "").trim();
+    const query = String(request.query.q ?? "")
+      .trim()
+      .toLocaleLowerCase();
     if (!query) return posts;
-    const expression = new RegExp(query, "i");
-    return posts.filter((post) => expression.test(post.title + " " + post.body));
+    return posts.filter((post) =>
+      (post.title + " " + post.body).toLocaleLowerCase().includes(query),
+    );
   },
 };
