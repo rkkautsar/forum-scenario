@@ -1,6 +1,4 @@
+import { excerpt } from "./text.ts";
 export function preview(text: string): string {
-  const chars = Array.from(text.replace(/\s+/g, " ").trim());
-  return chars.length > 180
-    ? chars.slice(0, 180).join("") + "…"
-    : chars.join("");
+  return excerpt(text, 180);
 }
