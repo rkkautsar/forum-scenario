@@ -6,7 +6,9 @@ export const feature: Feature = {
   filter(posts, { url }) {
     const query = (url.searchParams.get("q") ?? "").trim();
     if (!query) return posts;
-    const pattern = new RegExp(query, "i");
-    return posts.filter((post) => pattern.test(post.title + " " + post.body));
+    const needle = query.toLocaleLowerCase();
+    return posts.filter((post) =>
+      (post.title + " " + post.body).toLocaleLowerCase().includes(needle),
+    );
   },
 };
