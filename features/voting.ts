@@ -1,15 +1,4 @@
 import type { Feature } from "../src/server.ts";
-type VoteStep = (postId: string, userId: string) => void;
-class VotingPipeline {
-  private steps: VoteStep[] = [];
-  use(step: VoteStep) {
-    this.steps.push(step);
-    return this;
-  }
-  execute(postId: string, userId: string) {
-    for (const step of this.steps) step(postId, userId);
-  }
-}
 export const feature: Feature = {
   id: "voting",
   label: "Vote on threads",
@@ -35,13 +24,10 @@ export const feature: Feature = {
       send(404, { error: "Post not found" });
       return true;
     }
-    new VotingPipeline()
-      .use((postId, userId) => {
-        db.prepare(
-          "INSERT OR IGNORE INTO votes(postId,userId) VALUES(?,?)",
-        ).run(postId, userId);
-      })
-      .execute(match[1], user);
+    db.prepare("INSERT OR IGNORE INTO votes(postId,userId) VALUES(?,?)").run(
+      match[1],
+      user,
+    );
     send(200, {
       score: (
         db
