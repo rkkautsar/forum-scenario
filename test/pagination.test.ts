@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers.ts";
+
 test("feed returns a page of threads and rejects negative offsets", () =>
   session(async (request) => {
     assert.equal((await request("/api/posts?offset=0&limit=2")).data.length, 2);

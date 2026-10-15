@@ -1,11 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createForum } from "../src/server.ts";
+
 export async function session(
   fn: (request: (path: string, options?: any) => Promise<any>) => Promise<void>,
 ) {
   const app = await createForum(":memory:");
   await new Promise<void>((r) => app.listen(0, "127.0.0.1", r));
+
   try {
     const { port } = app.address() as any;
     await fn(async (path, options = {}) => {
@@ -17,6 +19,7 @@ export async function session(
           ...options.headers,
         },
       });
+
       return { status: response.status, data: await response.json() };
     });
   } finally {

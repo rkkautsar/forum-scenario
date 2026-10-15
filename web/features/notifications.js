@@ -1,5 +1,6 @@
 export async function mount({ api, tools }) {
   if (tools.querySelector("[data-notifications]")) return;
+
   const button = document.createElement("button");
   button.dataset.notifications = "";
   button.textContent = "Replies to me";
