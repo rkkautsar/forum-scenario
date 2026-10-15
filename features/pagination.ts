@@ -7,7 +7,13 @@ export const feature: ForumFeature = {
   filterPosts(posts, request) {
     const offset = Number(request.query.offset ?? 0);
     const limit = Number(request.query.limit ?? 2);
-    if (offset < 0 || limit < 1 || limit > 50) {
+    if (
+      !Number.isInteger(offset) ||
+      !Number.isInteger(limit) ||
+      offset < 0 ||
+      limit < 1 ||
+      limit > 50
+    ) {
       throw new Error("Invalid pagination");
     }
     return posts.slice(offset, offset + limit);
