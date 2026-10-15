@@ -7,6 +7,6 @@ permissions:
   contents: read
 jobs:
   validate:
-    uses: rkkautsar/maintainer-sim/.github/workflows/scenario-release.yml@e2cfe86f7ab10dc727f71c6d80b14e599b39a849
+    uses: rkkautsar/maintainer-sim/.github/workflows/scenario-release.yml@ba0f25a84968ca802b1bb6e9b1410fdf3cd7a44d
     with:
-      engine_ref: e2cfe86f7ab10dc727f71c6d80b14e599b39a849
+      engine_ref: ba0f25a84968ca802b1bb6e9b1410fdf3cd7a44d
