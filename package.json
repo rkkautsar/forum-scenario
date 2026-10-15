@@ -2,12 +2,15 @@
   "name": "forum",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24.0.0" },
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "start": "tsx src/server.ts",
     "dev": "concurrently -k \"tsx watch src/server.ts\" \"vite --host 127.0.0.1\"",
     "build": "vite build",
-    "test": "node --import tsx --test test/*.test.ts"
+    "test": "node --import tsx --test test/*.test.ts",
+    "verify:scenario": "node __scenario__/verify.ts"
   },
   "dependencies": {
     "express": "^5.1.0",
