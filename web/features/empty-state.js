@@ -1,10 +1,13 @@
 export async function mount({ feed, state }) {
   const empty = feed.querySelector(".empty");
+
   if (!empty) return;
+
   const title = document.createElement("strong");
   title.textContent = state.query.get("q")
     ? "No discussions match that search."
     : "Nothing here yet.";
+
   const hint = document.createElement("p");
   hint.textContent =
     state.query.get("saved") === "1"
