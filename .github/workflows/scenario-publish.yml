@@ -5,7 +5,12 @@ on:
 permissions:
   contents: write
 jobs:
+  verify:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/app.yml
   release:
-    uses: rkkautsar/maintainer-sim/.github/workflows/scenario-release.yml@ba0f25a84968ca802b1bb6e9b1410fdf3cd7a44d
+    needs: verify
+    uses: rkkautsar/maintainer-sim/.github/workflows/scenario-release.yml@aaeca78ed6d7bbfdee278fd90ccdbe000a996213
     with:
-      engine_ref: ba0f25a84968ca802b1bb6e9b1410fdf3cd7a44d
+      engine_ref: aaeca78ed6d7bbfdee278fd90ccdbe000a996213

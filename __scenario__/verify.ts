@@ -22,37 +22,34 @@ if (!version || !prefix) {
   throw new Error("scenario.yaml must define version and refPrefix");
 }
 
-const refs = [
-  ...new Set(
-    execFileSync(
-      "git",
-      [
-        "for-each-ref",
-        "--format=%(refname)",
-        "refs/heads",
-        "refs/remotes/origin",
-      ],
-      {
-        cwd: repository,
-        encoding: "utf8",
-      },
-    )
-      .trim()
-      .split("\n")
-      .map((ref) =>
-        ref
-          .replace(/^refs\/heads\//, "")
-          .replace(/^refs\/remotes\/origin\//, ""),
-      )
-      .filter(
-        (ref) =>
-          ref.startsWith(`${prefix}stage/`) &&
-          /\/(?:base|initial|rev-[1-3])$/.test(ref),
-      ),
-  ),
-];
+const refsByName = new Map<string, string>();
+const gitRefs = execFileSync(
+  "git",
+  ["for-each-ref", "--format=%(refname)", "refs/heads", "refs/remotes/origin"],
+  { cwd: repository, encoding: "utf8" },
+)
+  .trim()
+  .split("\n")
+  .filter(Boolean);
 
-if (!refs.some((ref) => ref.endsWith("/base"))) {
+for (const gitRef of gitRefs) {
+  const name = gitRef
+    .replace(/^refs\/heads\//, "")
+    .replace(/^refs\/remotes\/origin\//, "");
+  if (
+    !name.startsWith(`${prefix}stage/`) ||
+    !/\/(?:base|initial|rev-[1-3])$/.test(name)
+  ) {
+    continue;
+  }
+
+  // Keep a local branch when available, otherwise archive the remote-tracking ref.
+  if (!refsByName.has(name) || gitRef.startsWith("refs/heads/")) {
+    refsByName.set(name, gitRef);
+  }
+}
+
+if (![...refsByName.keys()].some((ref) => ref.endsWith("/base"))) {
   throw new Error(`No captured stage refs found under ${prefix}stage/`);
 }
 
@@ -61,10 +58,12 @@ try {
     cwd: repository,
     stdio: "ignore",
   });
-  refs.push("main");
+  refsByName.set("main", "refs/heads/main");
 } catch {
   // Some author checkouts may omit main; the captured refs are still verified.
 }
+
+const refs = [...refsByName].map(([name, gitRef]) => ({ name, gitRef }));
 
 const temporary = mkdtempSync(join(tmpdir(), "forum-snapshots-"));
 const dependencyDirectory = join(repository, "node_modules");
@@ -122,10 +121,10 @@ function verifyRuntimeWitness(
 
 function verifySemanticWitnesses(): void {
   const captures = new Map<string, string>();
-  for (const ref of refs) {
-    const name = ref.replace(`${prefix}stage/`, "");
+  for (const { name: branchName, gitRef } of refs) {
+    const name = branchName.replace(`${prefix}stage/`, "");
     const destination = join(temporary, name.replaceAll("/", "__"));
-    const archive = execFileSync("git", ["archive", "--format=tar", ref], {
+    const archive = execFileSync("git", ["archive", "--format=tar", gitRef], {
       cwd: repository,
     });
     execFileSync("mkdir", ["-p", destination]);
