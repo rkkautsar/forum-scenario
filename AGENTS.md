@@ -15,3 +15,5 @@ Author useful product work across natural API/UI/test boundaries. Each deliberat
 Use the maintainer-sim CLI from its checkout: `npm run scenario -- validate /path/to/this/repo`, then preview and publish. The source guide is `docs/AUTHORING.md` in maintainer-sim. Validation never executes repository code. Run `npm test` separately on trusted authored snapshots. `__scenario__/EVIDENCE.md` records defect witnesses; service tests execute API evidence and browser checks cover rendering.
 
 Do not add credentials or runtime SQLite files. Keep the authoring repo private if answers should be hidden. Only the published public baseline is copied to a player repository; source history and future branches are not.
+
+Keep JavaScript and TypeScript readable: group imports, leave blank lines between functions and object methods, and separate guards, reads, writes, and assertions into logical paragraphs. Apply shared formatting to stage baselines as well as contributions so PR diffs focus on behavior.
